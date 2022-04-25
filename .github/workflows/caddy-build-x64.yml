@@ -4,6 +4,12 @@ on:
   push:
     paths:
       - 'caddy-linux-x64.md'
+  workflow_dispatch:
+    inputs:
+      ssh:
+        description: 'SSH connection to Actions'
+        required: false
+        default: 'false'
 
 jobs:
   build:
