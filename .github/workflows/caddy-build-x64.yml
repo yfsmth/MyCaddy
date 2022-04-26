@@ -21,8 +21,8 @@ jobs:
     
     - name: install xcaddy
       run: |
-        tag_name=`curl -s https://api.github.com/repos/caddyserver/xcaddy/releases | grep 'tag_name' | sed -n '1p' | cut -d\" -f4`
-        wget https://github.com/caddyserver/xcaddy/releases/download/${tag_name}/xcaddy_${tag_name}_linux_amd64.tar.gz
+        tag_name=`curl -s https://api.github.com/repos/caddyserver/xcaddy/releases | grep 'tag_name' | sed -n '1p' | cut -d\" -f4` | sed 's/^.//'
+        wget https://github.com/caddyserver/xcaddy/releases/download/v${tag_name}/xcaddy_${tag_name}_linux_amd64.tar.gz
         tar xvzf xcaddy_${tag_name}_linux_amd64.tar.gz
         chmod 777 ./xcaddy
 
