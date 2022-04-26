@@ -1,2 +1,2 @@
 # MyCaddy
-build caddy with my custom
+build caddy server with my custom, include naiveproxy, trojan webdav and so on
