@@ -1,0 +1,55 @@
+name: Build caddy-linux-arm64
+
+on:
+  push:
+    paths:
+      - 'caddy-linux-arm64.md'
+  workflow_dispatch:
+    inputs:
+      ssh:
+        description: 'SSH connection to Actions'
+        required: false
+        default: 'false'
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: install go
+      uses: actions/setup-go@master
+      with:
+        go-version: '>=1.18.0'
+    
+    - name: install xcaddy
+      run: |
+        tag_name=`curl -s https://api.github.com/repos/caddyserver/xcaddy/releases | grep 'tag_name' | sed -n '1p' | cut -d\" -f4 | sed 's/^.//'`
+        wget https://github.com/caddyserver/xcaddy/releases/download/v${tag_name}/xcaddy_${tag_name}_linux_amd64.tar.gz
+        tar xvzf xcaddy_${tag_name}_linux_amd64.tar.gz
+        chmod 777 ./xcaddy
+
+    - name: build caddy
+      run: |
+        export GOARCH=arm64
+        export GOOS=linux
+        ./xcaddy build \
+          --with github.com/caddyserver/forwardproxy@caddy2=github.com/sagernet/forwardproxy@latest \
+          --with github.com/mholt/caddy-webdav \
+          --with github.com/mastercactapus/caddy2-proxyprotocol \
+          --with github.com/kirsch33/realip \
+          --with github.com/abiosoft/caddy-exec \
+          --with github.com/greenpau/caddy-trace \
+          --with github.com/aksdb/caddy-cgi/v2 \
+          --with github.com/abiosoft/caddy-json-parse \
+          --with github.com/caddyserver/ntlm-transport \
+          --with github.com/mholt/caddy-l4 \
+          --with github.com/sjtug/caddy2-filter \
+          --with github.com/casbin/caddy-authz/v2 \
+          --with github.com/imgk/caddy-trojan \
+          --with github.com/caddyserver/transform-encoder
+
+    - name: upload
+      uses: actions/upload-artifact@master
+      with:
+        name: caddy-linux-arm64
+        path: ./caddy
