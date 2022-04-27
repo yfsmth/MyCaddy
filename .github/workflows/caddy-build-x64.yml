@@ -18,6 +18,8 @@ jobs:
     steps:
     - name: install go
       uses: actions/setup-go@master
+      with:
+        go-version: '>=1.18.0'
     
     - name: install xcaddy
       run: |
