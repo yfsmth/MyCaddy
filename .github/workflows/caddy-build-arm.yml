@@ -32,7 +32,7 @@ jobs:
       run: |
         export GOARCH=arm64
         export GOOS=linux
-        ./xcaddy build \
+        ./xcaddy build master \
           --with github.com/caddyserver/forwardproxy@caddy2=github.com/sagernet/forwardproxy@latest \
           --with github.com/mholt/caddy-webdav \
           --with github.com/mastercactapus/caddy2-proxyprotocol \
